@@ -34,7 +34,8 @@ mongoose.connect(process.env.URL+'secretsDB');
 const userSchema = new mongoose.Schema({
     email: String,
     password: String,
-    googleId: String
+    googleId: String,
+    secret: String
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -118,11 +119,32 @@ app.route("/auth/google/secrets")
 
 app.route("/secrets")
     .get(async (req, res) => {
+        User.find({"secret": {$ne: null}}).exec()
+            .then(users => res.render("secrets", {users: users}))
+            .catch(err => console.log(err)); 
+    });
+
+app.route("/submit")
+    .get(async (req, res) => {
         if (req.isAuthenticated()){
-            res.render("secrets", {});
+            res.render("submit", {});
         } else {
             res.redirect("/login");
         }
+    })
+    .post(async (req, res) => {
+        const submittedSecret = req.body.secret;
+
+        User.findOne({_id: req.user._id}).exec()
+            .then(foundUser => {
+                if (foundUser){
+                    foundUser.secret = submittedSecret;
+                    foundUser.save()
+                        .then(() => res.redirect("/secrets"))
+                        .catch(err => console.log(err));
+                }
+            })
+            .catch(err => console.error(err));
     });
 
 app.route("/logout")

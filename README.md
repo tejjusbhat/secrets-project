@@ -22,7 +22,7 @@ Before running this application, you need to have the following installed:
 1. Clone the repository to your local machine:
 
 ```
-git clone https://github.com/your-username/secret-keeper.git
+git clone https://github.com/Tejjus/secrets-project.git
 cd secret-keeper
 ```
 

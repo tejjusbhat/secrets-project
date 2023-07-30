@@ -47,7 +47,7 @@ Replace `your_google_oauth_client_id` and `your_google_oauth_client_secret` with
 1. Run the application:
 
 ```
-npm start
+node app.js
 ```
 
 
